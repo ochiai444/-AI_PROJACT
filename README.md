@@ -4,19 +4,32 @@
 FastAPI와 OpenAI API를 활용하여 AI 기반 학습 계획 추천 시스템을 구현한다. 사용자의 학습 목표와 시험 일정, 공부 가능 시간을 분석하여 맞춤형 학습 계획을 생성하며, REST API 구현과 AI 연동 과정을 학습하는 것을 목표로 한다.
 
 ### [사용 기술 & 데이터]
-Python
+#### 기술 스택
+언어: Python
 
-FastAPI
+백엔드: FastAPI
 
-OpenAI API (LLM)
+프론트엔드: HTML, CSS, JavaScript
 
-SQLite
+데이터베이스: SQLite
 
-SQLAlchemy
+ORM: SQLAlchemy
 
-HTML / CSS / JavaScript
+데이터 검증: Pydantic
 
-Swagger(OpenAPI)
+LLM 연동: OpenAI API (GPT)
+
+API 테스트: Swagger(OpenAPI)
+
+데이터: 사용자 입력 데이터(과목, 시험일, 공부 가능 시간, 목표 등)
+
+개발 환경: VS Code, Python venv
+
+버전 관리: Git, GitHub
+#### 데이터
+사용자 입력 데이터(과목, 시험일, 공부 가능 시간, 목표 등)
+
+OpenAI API 프롬프트를 활용한 맞춤형 학습 계획 생성
 
 ### [개발 일정]
 #### Day 01 (7.20 월) : 데이터 준비 + 시작
