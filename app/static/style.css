@@ -1,256 +1,434 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+}
+
 body {
-    background: #f4f6fb;
-    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+    padding-bottom: 60px;
+    -webkit-font-smoothing: antialiased;
 }
 
+/* ==========================================
+   1. 상단 헤더 & 오른쪽 상단 마이페이지 버튼 (Fixed)
+========================================== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 24px 20px 16px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* 오른쪽 상단 고정 프로필 영역 */
+.user-profile {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 6px 8px 6px 14px;
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.user-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #4f46e5;
+}
+
+/* 오른쪽 상단 마이페이지 버튼 */
+.profile-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(79, 70, 229, 0.3);
+    transition: all 0.2s ease;
+}
+
+.profile-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+}
+
+.profile-btn:active {
+    transform: scale(0.95);
+}
+
+/* ==========================================
+   2. 레이아웃 & 카드 (Card UI)
+========================================== */
 .container {
-    width: 700px;
-    margin: 40px auto;
-}
-
-h1 {
-    text-align: center;
-    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .card {
-    background: white;
-    padding: 25px;
-    margin-top: 20px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card h2 {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.card-header h2 {
+    margin-bottom: 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* ==========================================
+   3. 입력 폼 & 버튼 (Input & Buttons)
+========================================== */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 input {
-    width: 90%;
-    padding: 12px;
-    margin: 8px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1.5px solid #e2e8f0;
+    background: #f8fafc;
     font-size: 15px;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+input:focus {
+    background: #ffffff;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+input::placeholder {
+    color: #94a3b8;
 }
 
 button {
-    width: 95%;
-    padding: 12px;
-    margin-top: 10px;
-    background: #4f46e5;
-    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 14px;
     border: none;
-    border-radius: 8px;
     cursor: pointer;
-    transition: .2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-button:hover {
-    background: #3730a3;
+.btn-primary {
+    width: 100%;
+    padding: 16px;
+    margin-top: 18px;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
 }
 
-.button-group{
-    display:flex;
-    gap:10px;
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
 }
 
-.button-group button{
-    width:50%;
+.btn-primary:active {
+    transform: translateY(0);
 }
 
-pre{
-    white-space:pre-wrap;
+.btn-copy {
+    padding: 8px 16px;
+    background: #e0e7ff;
+    color: #4338ca;
+    border-radius: 10px;
+    font-size: 13px;
 }
 
-#result{
-
-    margin-top:20px;
-
-    padding:20px;
-
-    border-radius:10px;
-
-    background:#f5f5f5;
-
-    line-height:1.8;
-
-    white-space:pre-wrap;
-
-    text-align:left;
-
+.btn-copy:hover {
+    background: #c7d2fe;
+    color: #3730a3;
 }
 
-
-/* ===========================
-   AI 채팅
-=========================== */
-
-.chat-box{
-
-    height:350px;
-
-    overflow-y:auto;
-
-    border:1px solid #ddd;
-
-    border-radius:10px;
-
-    padding:15px;
-
-    background:#fafafa;
-
-    margin-top:15px;
-
+.btn-logout {
+    width: 100%;
+    padding: 14px;
+    background: #f1f5f9;
+    color: #64748b;
+    border-radius: 14px;
 }
 
-
-/* 사용자 */
-
-.user{
-
-    background:#dbeafe;
-
-    padding:12px;
-
-    border-radius:12px;
-
-    margin:10px 0;
-
-    margin-left:80px;
-
-    text-align:right;
-
+.btn-logout:hover {
+    background: #e2e8f0;
+    color: #334155;
 }
 
-
-/* AI */
-
-.assistant{
-
-    background:#eeeeee;
-
-    padding:12px;
-
-    border-radius:12px;
-
-    margin:10px 0;
-
-    margin-right:80px;
-
-    text-align:left;
-
+/* ==========================================
+   4. 공부 계획 결과 박스 (Result & Summary)
+========================================== */
+.plan-summary-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-
-/* 입력창 */
-
-.chat-input{
-
-    display:flex;
-
-    gap:10px;
-
-    margin-top:15px;
-
+.d-day-badge {
+    background: #16a34a;
+    color: #ffffff;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
 }
 
-
-.chat-input input{
-
-    flex:1;
-
-    margin:0;
-
+.summary-info {
+    font-size: 14px;
+    color: #166534;
 }
 
-
-/* 전송 버튼 */
-
-.chat-input button{
-
-    width:90px;
-
-    margin:0;
-
+.summary-info strong {
+    color: #14532d;
 }
-/* =====================
-   AI 채팅
-===================== */
 
+.result-box {
+    padding: 22px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    font-size: 15px;
+    color: #334155;
+}
 
+/* ==========================================
+   5. AI 메신저 대화 영역 (Chat UI)
+========================================== */
 .chat-box {
-
-    height:300px;
-
-    overflow-y:auto;
-
-    padding:15px;
-
-    background:#f8fafc;
-
-    border-radius:10px;
-
-    margin-bottom:15px;
-
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
 }
 
+.chat-item {
+    display: flex;
+    gap: 12px;
+    max-width: 82%;
+    animation: fadeIn 0.3s ease-in-out;
+}
 
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-item.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.chat-item.assistant {
+    align-self: flex-start;
+}
+
+.chat-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.chat-bubble {
+    padding: 13px 18px;
+    border-radius: 20px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+.user .chat-bubble {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: #ffffff;
+    border-top-right-radius: 4px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.assistant .chat-bubble {
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid #e2e8f0;
+    border-top-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.loading-bubble {
+    color: #94a3b8;
+    font-style: italic;
+}
 
 .chat-input {
-
-    display:flex;
-
-    gap:10px;
-
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
 }
-
-
 
 .chat-input input {
-
-    flex:1;
-
+    flex: 1;
 }
 
+.btn-send {
+    width: 95px;
+    background: #4f46e5;
+    color: #ffffff;
+    border-radius: 14px;
+}
 
+.btn-send:hover {
+    background: #4338ca;
+}
 
-.user {
+/* ==========================================
+   6. 모바일 반응형 최적화
+========================================== */
+@media (max-width: 640px) {
+    .header {
+        padding: 16px 16px 12px;
+    }
+
+    .user-profile {
+        top: 12px;
+        right: 14px;
+        padding: 4px 6px 4px 10px;
+    }
+
+    .container {
+        padding: 0 14px;
+        gap: 14px;
+    }
+
+    .card {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .chat-item {
+        max-width: 92%;
+    }
+
+    .plan-summary-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+.plan-download-btn{
+
+    width:150px;
+
+    padding:10px;
+
+    margin-top:15px;
 
     background:#4f46e5;
 
     color:white;
 
-    padding:10px;
+    border:none;
 
-    border-radius:15px;
+    border-radius:8px;
 
-    margin:10px 0;
-
-    margin-left:50px;
-
-    text-align:right;
+    cursor:pointer;
 
 }
 
 
+.plan-download-btn:hover{
 
-.assistant {
+    background:#3730a3;
+
+}
+.plan-card{
 
     background:white;
 
-    border:1px solid #ddd;
+    padding:20px;
 
-    padding:10px;
+    margin-bottom:20px;
 
     border-radius:15px;
 
-    margin:10px 50px 10px 0;
-
-}
-
-
-
-.loading {
-
-    color:#777;
-
-    font-style:italic;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
 
 }

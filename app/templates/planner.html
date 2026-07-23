@@ -2,111 +2,55 @@
 <html lang="ko">
 
 <head>
-
     <meta charset="UTF-8">
-
     <title>AI Study Planner</title>
-
     <link rel="icon" href="/static/favicon.ico">
-
     <link rel="stylesheet" href="/static/style.css">
-
 </head>
 
 <body>
-
-<div class="container">
-
-    <h1>📚 AI Study Planner</h1>
-
-    <p id="user-info"></p>
-
-
-    <!-- 공부 계획 입력 -->
-
-    <div class="card">
-
-        <input id="subject" placeholder="과목">
-
-        <input id="exam_date" type="date">
-
-        <input id="study_time" placeholder="하루 공부 가능 시간">
-
-        <input id="goal" placeholder="목표">
-
-        <button onclick="createPlan()">
-
-            공부 계획 생성
-
-        </button>
-
+    <!-- 우측 상단 마이페이지/프로필 버튼 -->
+    <div class="user-profile">
+        <button class="profile-btn" onclick="location.href='/mypage'">👤</button> 
     </div>
 
+    <div class="container">
+        <h1>📚 AI Study Planner</h1>
+        <p id="user-info"></p>
 
-    <!-- AI 결과 -->
-
-    <div class="card">
-
-        <h2>AI 추천 공부 계획</h2>
-
-        <button onclick="copyPlan()">
-
-            📋 복사
-
-        </button>
-
-        <div id="result">
-
-            아직 생성된 계획이 없습니다.
-
+        <!-- 공부 계획 입력 Card -->
+        <div class="card">
+            <input id="subject" placeholder="과목">
+            <input id="exam_date" type="date">
+            <input id="study_time" placeholder="하루 공부 가능 시간">
+            <input id="goal" placeholder="목표">
+            <button onclick="createPlan()">공부 계획 생성</button>
         </div>
 
-    </div>
-
-
-    <!-- AI 채팅 -->
-
-    <div class="card">
-
-        <h2>💬 AI에게 추가 질문</h2>
-
-        <div id="chat-box" class="chat-box">
-
+        <!-- AI 결과 Card -->
+        <div class="card">
+            <h2>AI 추천 공부 계획</h2>
+            <button onclick="copyPlan()">📋 복사</button>
+            <div id="result">아직 생성된 계획이 없습니다.</div>
         </div>
 
-        <div class="chat-input">
-
-            <input
-                id="chat-input"
-                placeholder="궁금한 내용을 입력하세요">
-
-            <button onclick="sendMessage()">
-
-                전송
-
-            </button>
-
+        <!-- AI 채팅 Card -->
+        <div class="card">
+            <h2>💬 AI에게 추가 질문</h2>
+            <div id="chat-box" class="chat-box"></div>
+            <div class="chat-input">
+                <input id="chat-input" placeholder="궁금한 내용을 입력하세요" onkeydown="handleKeyPress(event)">
+                <button onclick="sendMessage()">전송</button>
+            </div>
         </div>
 
+        <!-- 로그아웃 Card -->
+        <div class="card">
+            <button onclick="logout()">로그아웃</button>
+        </div>
     </div>
 
-
-    <!-- 로그아웃 -->
-
-    <div class="card">
-
-        <button onclick="logout()">
-
-            로그아웃
-
-        </button>
-
-    </div>
-
-</div>
-
-<script src="/static/script.js"></script>
-
+    <script src="/static/script.js"></script>
 </body>
 
 </html>

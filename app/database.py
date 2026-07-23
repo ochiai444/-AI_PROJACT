@@ -1,17 +1,18 @@
+import os
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base
 
 
-# AI 채팅 프로젝트 DB
-DATABASE_URL = "sqlite:///./chat.db"
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://postgres:6162@localhost:5432/ai_study_planner"
+)
 
 
 engine = create_engine(
-    DATABASE_URL,
-    connect_args={
-        "check_same_thread": False
-    }
+    DATABASE_URL
 )
 
 
@@ -25,8 +26,9 @@ SessionLocal = sessionmaker(
 Base = declarative_base()
 
 
-# DB 세션 생성
+
 def get_db():
+
     db = SessionLocal()
 
     try:

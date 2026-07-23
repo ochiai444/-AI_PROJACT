@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>My Page</title>
+
+<link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<h1>👤 마이페이지</h1>
+
+
+<div class="card">
+
+<h2>📚 내 공부 계획</h2>
+
+
+<div id="plans">
+
+불러오는 중...
+
+</div>
+
+
+</div>
+
+
+
+<div class="card">
+
+<h2>💬 내 AI 대화</h2>
+
+
+<div id="chats">
+
+불러오는 중...
+
+</div>
+
+
+</div>
+
+
+
+<button onclick="location.href='/planner'">
+
+뒤로가기
+
+</button>
+
+
+</div>
+
+
+
+<script>
+
+
+const token =
+localStorage.getItem("token");
+
+
+
+// 계획 가져오기
+
+fetch(
+"/my-plans",
+{
+headers:{
+"Authorization":
+"Bearer "+token
+}
+}
+
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+
+let html="";
+
+
+data.forEach(plan=>{
+
+
+html += `
+
+<div class="plan-card">
+
+<h3>
+📚 ${plan.subject}
+</h3>
+
+
+<p>
+📅 시험일 :
+${plan.exam_date}
+</p>
+
+
+<p>
+🎯 목표 :
+${plan.goal}
+</p>
+
+
+<p>
+⏰ 공부 시간 :
+${plan.study_time}시간
+</p>
+
+
+<hr>
+
+
+<h4>
+AI 추천 계획
+</h4>
+
+
+<p>
+${plan.plan.replace(/\n/g,"<br>")}
+</p>
+
+
+<button
+class="plan-download-btn"
+onclick="downloadPDF(${plan.id})">
+
+📄 PDF 다운로드
+
+</button>
+
+
+</div>
+
+`;
+
+
+});
+
+
+document.getElementById("plans").innerHTML =
+html;
+
+
+});
+
+
+
+
+
+// 채팅 가져오기
+
+fetch(
+"/my-chats",
+{
+headers:{
+"Authorization":
+"Bearer "+token
+}
+}
+
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+
+let html="";
+
+
+data.forEach(chat=>{
+
+
+html += `
+
+<p>
+
+<b>${chat.role}</b>
+
+<br>
+
+${chat.content}
+
+</p>
+
+<hr>
+
+`;
+
+
+});
+
+
+document.getElementById("chats").innerHTML =
+html;
+
+
+});
+
+function downloadPDF(planId){
+
+
+    const token =
+    localStorage.getItem("token");
+
+
+    fetch(
+        `/download-plan/${planId}`,
+        {
+
+            headers:{
+                "Authorization":
+                "Bearer " + token
+            }
+
+        }
+
+    )
+
+    .then(response=>response.blob())
+
+    .then(blob=>{
+
+
+        const url =
+        window.URL.createObjectURL(blob);
+
+
+        const a =
+        document.createElement("a");
+
+
+        a.href=url;
+
+
+        a.download =
+        "study_plan.pdf";
+
+
+        document.body.appendChild(a);
+
+
+        a.click();
+
+
+        a.remove();
+
+
+        window.URL.revokeObjectURL(url);
+
+
+    });
+
+
+}
+</script>
+
+
+</body>
+
+</html>

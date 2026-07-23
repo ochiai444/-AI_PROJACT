@@ -1,12 +1,14 @@
 import os
-
+from fastapi.responses import FileResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
-
-
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 from app.schemas import (
     UserCreate,
     PlanRequest,
@@ -14,8 +16,15 @@ from app.schemas import (
 )
 
 from app.database import engine, get_db
-from app.models import Base
-from app.crud import create_user, get_user_by_username
+from app.models import Base,StudyPlan
+from app.crud import (
+    create_user,
+    get_user_by_username,
+    save_plan,
+    save_chat,
+    get_user_plans,
+    get_user_chats
+)
 from app.ai import generate_plan, chat
 from app.auth import verify_password, create_token, decode_token
 
@@ -164,7 +173,14 @@ def signup_page(request: Request):
         name="signup.html",
         context={}
     )
+@app.get("/mypage")
+def mypage(request: Request):
 
+    return templates.TemplateResponse(
+        request=request,
+        name="mypage.html",
+        context={}
+    )
 
 
 # ======================
@@ -270,6 +286,7 @@ def login(
 @app.post("/generate-plan")
 def create_plan(
     data: PlanRequest,
+    db: Session = Depends(get_db),
     username: str = Depends(get_current_user)
 ):
 
@@ -282,13 +299,25 @@ def create_plan(
     )
 
 
+    # 공부 계획 DB 저장
+    save_plan(
+        db,
+        username,
+        data.subject,
+        data.exam_date,
+        data.study_time,
+        data.goal,
+        result
+    )
+
+
     return {
 
-        "username":username,
+        "username": username,
 
-        "message":"공부 계획 생성 완료",
+        "message": "공부 계획 생성 완료",
 
-        "plan":result
+        "plan": result
 
     }
 
@@ -300,14 +329,242 @@ def create_plan(
 
 
 @app.post("/chat")
-def chat_api(data: ChatRequest):
+def chat_api(
+    data: ChatRequest,
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
 
     print("사용자 메시지:", data.messages)
 
-    answer = chat(data.messages)
+
+    messages = [
+        {
+            "role": msg.role,
+            "content": msg.content
+        }
+        for msg in data.messages
+    ]
+
+
+    answer = chat(messages)
+
+
+    # 사용자 질문 저장
+    for msg in messages:
+
+        if msg["role"] == "user":
+
+            save_chat(
+                db,
+                username,
+                "user",
+                msg["content"]
+            )
+
+
+    # AI 답변 저장
+    save_chat(
+        db,
+        username,
+        "assistant",
+        answer
+    )
+
 
     print("AI 답변:", answer)
+
 
     return {
         "answer": answer
     }
+
+@app.get("/my-plans")
+def my_plans(
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
+
+    plans = get_user_plans(
+        db,
+        username
+    )
+
+
+    return [
+        {
+            "id": p.id,
+            "subject": p.subject,
+            "exam_date": p.exam_date,
+            "study_time": p.study_time,
+            "goal": p.goal,
+            "plan": p.plan,
+            "created_at": p.created_at
+        }
+        for p in plans
+    ]
+
+
+
+@app.get("/my-chats")
+def my_chats(
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
+
+    chats = get_user_chats(
+        db,
+        username
+    )
+
+
+    return [
+        {
+            "id": c.id,
+            "role": c.role,
+            "content": c.content,
+            "created_at": c.created_at
+        }
+        for c in chats
+    ]
+
+# ======================
+# PDF 다운로드
+# ======================
+
+@app.get("/download-plan/{plan_id}")
+def download_plan(
+    plan_id: int,
+    db: Session = Depends(get_db),
+    username: str = Depends(get_current_user)
+):
+
+    plan = db.query(StudyPlan).filter(
+        StudyPlan.id == plan_id,
+        StudyPlan.username == username
+    ).first()
+
+
+    if plan is None:
+        raise HTTPException(
+            status_code=404,
+            detail="계획을 찾을 수 없습니다."
+        )
+
+
+    filename = f"study_plan_{plan_id}.pdf"
+
+
+    pdf_dir = "pdf"
+
+    os.makedirs(
+        pdf_dir,
+        exist_ok=True
+    )
+
+
+    pdf_path = os.path.join(
+        pdf_dir,
+        filename
+    )
+
+
+    pdfmetrics.registerFont(
+        UnicodeCIDFont(
+            "HYSMyeongJo-Medium"
+        )
+    )
+
+
+    c = canvas.Canvas(
+        pdf_path,
+        pagesize=A4
+    )
+
+
+    width, height = A4
+
+    y = height - 50
+
+
+    c.setFont(
+        "HYSMyeongJo-Medium",
+        14
+    )
+
+
+    c.drawString(
+        50,
+        y,
+        "AI Study Planner"
+    )
+
+
+    y -= 40
+
+
+    c.setFont(
+        "HYSMyeongJo-Medium",
+        11
+    )
+
+
+    contents = [
+
+        f"과목 : {plan.subject}",
+
+        f"시험일 : {plan.exam_date}",
+
+        f"공부 시간 : {plan.study_time}시간",
+
+        f"목표 : {plan.goal}",
+
+        "",
+
+        "AI 추천 계획",
+
+        plan.plan
+
+    ]
+
+
+    for text in contents:
+
+        for line in text.split("\n"):
+
+
+            if y < 50:
+
+                c.showPage()
+
+                c.setFont(
+                    "HYSMyeongJo-Medium",
+                    11
+                )
+
+                y = height - 50
+
+
+            c.drawString(
+                50,
+                y,
+                line
+            )
+
+
+            y -= 20
+
+
+
+    c.save()
+
+
+    return FileResponse(
+
+        pdf_path,
+
+        media_type="application/pdf",
+
+        filename=filename
+
+    )

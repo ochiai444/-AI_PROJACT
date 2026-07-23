@@ -20,7 +20,7 @@ class ChatMessage(BaseModel):
 
 class ChatRequest(BaseModel):
 
-    messages: list
+    messages: list[ChatMessage]
 
 class ChatResponse(BaseModel):
     answer: str
