@@ -1,15 +1,21 @@
 import os
-from openai import OpenAI
+import requests
 from dotenv import load_dotenv
-
 
 load_dotenv()
 
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
-    base_url=os.getenv("MLAPI_BASE_URL")
-)
+# ======================
+# ML API 설정
+# ======================
+
+MLAPI_URL = os.getenv("MLAPI_BASE_URL") + "/chat/completions"
+API_KEY = os.getenv("ELICE_API_KEY")
+MODEL = os.getenv("MLAPI_MODEL")
+
+
+print("BASE URL:", MLAPI_URL)
+print("MODEL:", MODEL)
 
 
 
@@ -18,7 +24,6 @@ client = OpenAI(
 # ======================
 
 def generate_plan(subject, exam_date, study_time, goal):
-
 
     prompt = f"""
 과목: {subject}
@@ -30,30 +35,58 @@ def generate_plan(subject, exam_date, study_time, goal):
 """
 
 
-    response = client.chat.completions.create(
+    payload = {
 
-        model="openai/gpt-5-mini",
+        "model": MODEL,
 
-        messages=[
+        "messages": [
 
             {
-                "role":"system",
+                "role": "system",
                 "content":
-                "너는 학습 계획을 전문적으로 작성해주는 AI 스터디 플래너이다."
+                "너는 학습 계획을 전문적으로 작성하는 AI 스터디 플래너이다."
             },
 
             {
-                "role":"user",
-                "content":prompt
+                "role": "user",
+                "content": prompt
             }
 
         ]
 
+    }
+
+
+    headers = {
+
+        "accept": "application/json",
+
+        "content-type": "application/json",
+
+        "Authorization": f"Bearer {API_KEY}"
+
+    }
+
+
+    response = requests.post(
+        MLAPI_URL,
+        json=payload,
+        headers=headers
     )
 
 
-    return response.choices[0].message.content
+    print("STATUS:", response.status_code)
+    print("TEXT:", response.text)
 
+
+    if response.status_code != 200:
+        return "AI 서버 오류 발생"
+
+
+    data = response.json()
+
+
+    return data["choices"][0]["message"]["content"]
 
 
 
@@ -73,23 +106,57 @@ def chat(messages):
         """
 너는 AI 학습 플래너이다.
 
-사용자의 공부 관련 질문에 답변하고,
-필요하면 공부 방법, 일정 관리, 학습 전략을 추천한다.
+사용자의 공부 관련 질문에 답변하고
+공부 방법, 일정 관리, 학습 전략을 추천한다.
 """
+
     }
 
 
 
-    response = client.chat.completions.create(
+    payload = {
 
-        model="openai/gpt-5-mini",
+        "model": MODEL,
 
-
-        messages=[
+        "messages":
+        [
             system_message
         ] + messages
 
+    }
+
+
+
+    headers = {
+
+        "accept":"application/json",
+
+        "content-type":"application/json",
+
+        "Authorization":f"Bearer {API_KEY}"
+
+    }
+
+
+
+    response = requests.post(
+        MLAPI_URL,
+        json=payload,
+        headers=headers
     )
 
 
-    return response.choices[0].message.content
+    print("STATUS:", response.status_code)
+    print("TEXT:", response.text)
+
+
+
+    if response.status_code != 200:
+        return "AI 서버 오류 발생"
+
+
+
+    data = response.json()
+
+
+    return data["choices"][0]["message"]["content"]
