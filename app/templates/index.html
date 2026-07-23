@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI Study Planner</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/static/favicon.ico">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📚 AI Study Planner</h1>
+
+    <!-- 시작하기 -->
+    <div class="card">
+
+        <h2>시작하기</h2>
+
+        <p id="welcome">
+            로그인 후 AI 공부 계획을 생성할 수 있습니다.
+        </p>
+
+        <div class="button-group">
+
+            <!-- 여기만 수정 -->
+            <button onclick="location.href='/login-page'">
+                로그인
+            </button>
+
+            <button onclick="location.href='/signup-page'">
+                회원가입
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- 공부 계획 -->
+    <div class="card">
+
+        <h2>AI 공부 계획 생성</h2>
+
+        <input
+            id="subject"
+            placeholder="과목">
+
+        <input
+            id="exam_date"
+            placeholder="시험 날짜 (예: 2026-07-22)">
+
+        <input
+            id="study_time"
+            placeholder="하루 공부 시간">
+
+        <input
+            id="goal"
+            placeholder="목표">
+
+        <button onclick="createPlan()">
+            ✨ 계획 생성
+        </button>
+
+    </div>
+
+    <!-- 결과 -->
+    <div class="card">
+
+        <h2>생성 결과</h2>
+
+        <pre id="result"></pre>
+
+    </div>
+
+</div>
+
+<script src="/static/script.js"></script>
+
+<script>
+    // 로그인 상태 확인
+    const token = localStorage.getItem("token");
+
+    if(token){
+        document.getElementById("welcome").innerText =
+            "✅ 로그인되었습니다. AI 공부 계획을 생성해보세요.";
+    }
+</script>
+
+</body>
+
+</html>

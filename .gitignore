@@ -1,5 +1,5 @@
+.env
 venv/
 study_planner.db
-.env
 __pycache__/
 *.pyc
