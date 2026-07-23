@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-uvicorn server:app --host 127.0.0.1 --port 8000 &
+uvicorn app.server:app --host 127.0.0.1 --port 8000 &
 
-streamlit run app.py \
+streamlit run app/app.py \
   --server.port "${PORT:-7860}" \
   --server.address 0.0.0.0
