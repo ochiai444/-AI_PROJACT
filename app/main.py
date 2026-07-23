@@ -124,11 +124,13 @@ def get_current_user(
 
 
 @app.get("/")
-def home():
+def home(request: Request):
 
-    return {
-        "message":"AI Study Planner"
-    }
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={}
+    )
 
 
 
