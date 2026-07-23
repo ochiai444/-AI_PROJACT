@@ -9,15 +9,15 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
-from schemas import (
+from app.app.schemas import (
     UserCreate,
     PlanRequest,
     ChatRequest
 )
 
-from database import engine, get_db
-from models import Base, StudyPlan
-from crud import (
+from app.app.database import engine, get_db
+from app.app.models import Base, StudyPlan
+from app.app.crud import (
     create_user,
     get_user_by_username,
     save_plan,
@@ -25,8 +25,8 @@ from crud import (
     get_user_plans,
     get_user_chats
 )
-from ai import generate_plan, chat
-from auth import verify_password, create_token, decode_token
+from app.app.ai import generate_plan, chat
+from app.app.auth import verify_password, create_token, decode_token
 
 
 
