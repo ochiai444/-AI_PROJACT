@@ -1,13 +1,15 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base
+
+
+load_dotenv()
 
 
 DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:6162@localhost:5432/ai_study_planner"
+    "DATABASE_URL"
 )
 
 
@@ -24,7 +26,6 @@ SessionLocal = sessionmaker(
 
 
 Base = declarative_base()
-
 
 
 def get_db():

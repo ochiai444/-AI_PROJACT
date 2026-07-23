@@ -3,12 +3,10 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import os
 
-
-SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "local-test-secret-key"
-)
+# 기존에 하드코딩되어 있던 시크릿 키 대신 환경변수를 사용하도록 변경
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key-for-local")
 ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 
