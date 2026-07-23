@@ -8,7 +8,7 @@ load_dotenv()
 # ML API 설정
 # ======================
 BASE_URL = (os.getenv("MLAPI_BASE_URL") or "").rstrip("/")
-MLAPI_URL = f"{BASE_URL}/chat/completions" if BASE_URL else ""
+MLAPI_URL = BASE_URL + "/chat/completions"
 
 API_KEY = os.getenv("ELICE_API_KEY")
 MODEL = os.getenv("MLAPI_MODEL")
